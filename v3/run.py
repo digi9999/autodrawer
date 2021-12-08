@@ -1,34 +1,31 @@
 print("Autodrawer v3 (JPG images only)")
 
 from PIL import Image
-import time
-
 import pyautogui
 pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.01
 
 import os
+import sys
 import math
+import time
 import keyboard
 
-import sys
 sys.setrecursionlimit(1500)
 
-
-def getImageLink():
+def getImageLink(filename):
     cwd = os.path.dirname(os.path.abspath(__file__))
-    img_link = os.path.join(cwd, "eren.jpg")
+    img_link = os.path.join(cwd, filename)
     return img_link
 
-myImg = Image.open(getImageLink())
+myImg = Image.open(getImageLink("bird.jpg"))
 pix = myImg.load()
 width,height = myImg.size
 
 draw_parems = {
     "scale": float(input("dist:")),
     "top_x": pyautogui.position().x,
-    "top_y": pyautogui.position().y
-}
+    "top_y": pyautogui.position().y}
 
 color_0 = (0,0,0)
 color_1 = (64,64,64)
@@ -38,25 +35,34 @@ color_w = (255,255,255)
 
 def scanImage():
     for y in range(0, height, 1):
-        print(f"running.. {math.trunc(y/height * 100)}% ")
+        print(f"running.. {math.trunc(y/height * 100)}%")
         for x in range(0,width,1):
-
             # CUSTOM FAIL SAFE BUTTON
             if keyboard.is_pressed("esc"):
                 time.sleep(1)
                 break
 
             if pix[x,y] >= color_0 and pix[x,y] <= color_2:
-                pyautogui.moveTo(draw_parems["top_x"] + x, draw_parems["top_y"] + y)
-                run_trace(x,y,color_0,color_2, draw_parems)
+                # pyautogui.moveTo(draw_parems["top_x"] + x, draw_parems["top_y"] + y)
+                pyautogui.mouseDown(draw_parems["top_x"] + x, draw_parems["top_y"] + y)
+                try:
+                    run_trace(x,y,color_0,color_2, draw_parems)
+                except:
+                    print("hit limit")
+                pyautogui.mouseUp()
 
         os.system('cls||clear')
     print("Completed!")
 
 def run_trace(x,y,color_a,color_b, obj):
+
+    # CUSTOM FAIL SAFE BUTTON
+    if keyboard.is_pressed("esc"):
+        return False
+    
     d = obj["scale"]
     delay = 0.01
-    allow = True
+    allow = False
     if pix[x,y] >= color_a and pix[x,y] <= color_b and x < width and y < height and x >= 0 and y > 0:
 
         if x >= 0 and pix[x-1,y] >= color_a and pix[x-1,y] <= color_b:
