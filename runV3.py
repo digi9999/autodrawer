@@ -18,7 +18,7 @@ def getImageLink(filename):
     img_link = os.path.join(cwd, filename)
     return img_link
 
-myImg = Image.open(getImageLink("ztrooper.jpg"))
+myImg = Image.open(getImageLink("img\\trooper.jpg"))
 pix = myImg.load()
 width,height = myImg.size
 

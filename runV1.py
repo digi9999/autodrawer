@@ -14,7 +14,7 @@ import keyboard
 
 def getImageLink():
     cwd = os.path.dirname(os.path.abspath(__file__))
-    img_link = os.path.join(cwd, "ztrooper.jpg")
+    img_link = os.path.join(cwd, "img\\trooper.jpg")
     return img_link
 
 myImg = Image.open(getImageLink())
